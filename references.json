@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "status": "mapped-to-build-pairs",
+  "entries": [
+    {"project": "lwan", "osv_id": "OSV-2020-668", "oss_fuzz_id": "19013", "bug_type": "heap-buffer-overflow", "affected_releases": null, "pair_manifest": "manifests/lwan.json", "source": "https://api.osv.dev/v1/vulns/OSV-2020-668"},
+    {"project": "pcapplusplus", "osv_id": "OSV-2020-772", "oss_fuzz_id": "23601", "bug_type": "heap-buffer-overflow", "affected_releases": ["v20.08"], "pair_manifest": "manifests/pcapplusplus.json", "source": "https://api.osv.dev/v1/vulns/OSV-2020-772"},
+    {"project": "harfbuzz", "osv_id": "OSV-2021-573", "oss_fuzz_id": "32555", "bug_type": "heap-buffer-overflow", "affected_releases": null, "pair_manifest": "manifests/harfbuzz.json", "source": "https://api.osv.dev/v1/vulns/OSV-2021-573"},
+    {"project": "wasm3", "osv_id": "OSV-2021-642", "oss_fuzz_id": "33318", "bug_type": "heap-buffer-overflow", "affected_releases": [], "pair_manifest": "manifests/wasm3.json", "source": "https://api.osv.dev/v1/vulns/OSV-2021-642"},
+    {"project": "file", "osv_id": "OSV-2017-134", "oss_fuzz_id": "1064", "bug_type": "heap-buffer-overflow", "affected_releases": ["FILE5_29", "FILE5_30"], "pair_manifest": "manifests/file.json", "source": "https://api.osv.dev/v1/vulns/OSV-2017-134"},
+    {"project": "c-ares", "osv_id": "OSV-2020-435", "oss_fuzz_id": "15373", "bug_type": "heap-buffer-overflow", "affected_releases": [], "pair_manifest": "manifests/c-ares.json", "source": "https://api.osv.dev/v1/vulns/OSV-2020-435"},
+    {"project": "quickjs", "osv_id": "OSV-2020-1053", "oss_fuzz_id": "21404", "bug_type": "unknown-read", "affected_releases": ["20200316"], "pair_manifest": "manifests/quickjs.json", "source": "https://api.osv.dev/v1/vulns/OSV-2020-1053"},
+    {"project": "libass", "osv_id": "OSV-2021-442", "oss_fuzz_id": "31301", "bug_type": "heap-buffer-overflow", "affected_releases": [], "pair_manifest": "manifests/libass.json", "source": "https://api.osv.dev/v1/vulns/OSV-2021-442"},
+    {"project": "c-blosc2", "osv_id": "OSV-2022-322", "oss_fuzz_id": "46460", "bug_type": "heap-buffer-overflow", "affected_releases": [], "pair_manifest": "manifests/c-blosc2.json", "source": "https://api.osv.dev/v1/vulns/OSV-2022-322"},
+    {"project": "libredwg", "osv_id": "OSV-2022-129", "oss_fuzz_id": "44481", "bug_type": "heap-buffer-overflow", "affected_releases": [], "pair_manifest": "manifests/libredwg.json", "source": "https://api.osv.dev/v1/vulns/OSV-2022-129"},
+    {"project": "libvips", "osv_id": "OSV-2022-323", "oss_fuzz_id": "46436", "bug_type": "heap-buffer-overflow", "affected_releases": [], "pair_manifest": "manifests/libvips.json", "source": "https://api.osv.dev/v1/vulns/OSV-2022-323"},
+    {"project": "libjxl", "osv_id": "OSV-2022-296", "oss_fuzz_id": "46243", "bug_type": "negative-size-param", "affected_releases": [], "pair_manifest": "manifests/libjxl.json", "source": "https://api.osv.dev/v1/vulns/OSV-2022-296"},
+    {"project": "muparser", "osv_id": "OSV-2020-1093", "oss_fuzz_id": "23330", "bug_type": "heap-buffer-overflow", "affected_releases": [], "pair_manifest": "manifests/muparser.json", "source": "https://api.osv.dev/v1/vulns/OSV-2020-1093"}
+  ]
+}

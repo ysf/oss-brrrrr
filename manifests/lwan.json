@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "pair_id": "lwan-oss-fuzz-19013",
+  "project": "lwan",
+  "repository": "https://github.com/lpereira/lwan",
+  "change": {
+    "reference": "https://api.osv.dev/v1/vulns/OSV-2020-668",
+    "description": "Immediate parent and fix commit for OSS-Fuzz issue 19013; OSV lists no affected release.",
+    "kind": "oss-fuzz-fix-commit"
+  },
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/master/projects/lwan",
+  "architecture": "x86_64",
+  "format": "ELF64-little-endian",
+  "role": "library",
+  "runner": "ubuntu-24.04",
+  "recipe": "recipes/lwan.sh",
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/lwan",
+  "ldflags": "-Wl,--build-id=sha1",
+  "parallel_jobs": 2,
+  "limits": {
+    "source_archive_bytes": 16777216,
+    "source_expanded_bytes": 134217728,
+    "corpus_bytes": 67108864,
+    "workspace_checkpoint_bytes": 4294967296
+  },
+  "license": {
+    "spdx": "GPL-2.0-or-later",
+    "notice_sources": ["COPYING"],
+    "review": "GPL-2.0 license text retained. Source URL and SHA-256 are recorded; provide complete corresponding source or a compliant written offer before binary distribution."
+  },
+  "versions": [
+    {
+      "side": "before",
+      "version": "19013-before",
+      "tag": "d7fc0d27",
+      "revision": "d7fc0d27fbea5c68d61444033517d0e962e822e6",
+      "source_date_epoch": 1574009141,
+      "source_archive_url": "https://codeload.github.com/lpereira/lwan/tar.gz/d7fc0d27fbea5c68d61444033517d0e962e822e6",
+      "archive_root": "lwan-d7fc0d27fbea5c68d61444033517d0e962e822e6",
+      "target": "build/liblwan.so",
+      "required_defined_symbols": ["lwan_tpl_compile_string", "lwan_tpl_apply", "lwan_tpl_free"],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "after",
+      "version": "19013-fixed",
+      "tag": "2c9dc729",
+      "revision": "2c9dc72966276f35f9bf697ee49038c1cdee24bb",
+      "source_date_epoch": 1574217727,
+      "source_archive_url": "https://codeload.github.com/lpereira/lwan/tar.gz/2c9dc72966276f35f9bf697ee49038c1cdee24bb",
+      "archive_root": "lwan-2c9dc72966276f35f9bf697ee49038c1cdee24bb",
+      "target": "build/liblwan.so",
+      "required_defined_symbols": ["lwan_tpl_compile_string", "lwan_tpl_apply", "lwan_tpl_free"],
+      "absent_defined_symbols": []
+    }
+  ]
+}

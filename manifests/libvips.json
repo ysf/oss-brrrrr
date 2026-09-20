@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "pair_id": "libvips-oss-fuzz-46436",
+  "project": "libvips",
+  "repository": "https://github.com/libvips/libvips",
+  "change": {"reference": "https://api.osv.dev/v1/vulns/OSV-2022-323", "description": "Immediate parent and fix commit selected from the OSS-Fuzz range for issue 46436; the commit adds EXIF OffsetTime tag support and is not an isolated crash fix.", "kind": "oss-fuzz-fix-commit", "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065"},
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/366f8b394247b5b8165f05d6321c3da845e00065/projects/libvips",
+  "architecture": "x86_64", "format": "ELF64-little-endian", "role": "library", "runner": "ubuntu-24.04", "recipe": "recipes/libvips.sh",
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/libvips", "ldflags": "-Wl,--build-id=sha1", "parallel_jobs": 2,
+  "limits": {"source_archive_bytes": 33554432, "source_expanded_bytes": 268435456, "corpus_bytes": 67108864, "workspace_checkpoint_bytes": 4294967296},
+  "license": {"spdx": "LGPL-2.1-or-later", "notice_sources": ["COPYING"], "review": "The upstream LGPLv2.1-or-later license is retained. Only the shared image library is built; tools, tests and fuzzers are excluded. GLib, libexif and libexpat remain external system dependencies."},
+  "versions": [
+    {"side": "parent", "version": "46436-parent", "tag": "7e64c48c", "revision": "7e64c48ca9bc8eaf5d3482078e74da9a08bb7707", "source_date_epoch": 1652166893, "source_archive_url": "https://codeload.github.com/libvips/libvips/tar.gz/7e64c48ca9bc8eaf5d3482078e74da9a08bb7707", "archive_root": "libvips-7e64c48ca9bc8eaf5d3482078e74da9a08bb7707", "target": "libvips/.libs/libvips.so", "required_defined_symbols": ["vips_init", "vips_shutdown", "vips_image_new"], "absent_defined_symbols": []},
+    {"side": "fix", "version": "46436-fixed", "tag": "9cbc3612", "revision": "9cbc361269cedd5ddadd9695d7aa3368daa31d24", "source_date_epoch": 1652185569, "source_archive_url": "https://codeload.github.com/libvips/libvips/tar.gz/9cbc361269cedd5ddadd9695d7aa3368daa31d24", "archive_root": "libvips-9cbc361269cedd5ddadd9695d7aa3368daa31d24", "target": "libvips/.libs/libvips.so", "required_defined_symbols": ["vips_init", "vips_shutdown", "vips_image_new"], "absent_defined_symbols": []}
+  ]
+}

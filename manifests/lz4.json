@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "pair_id": "lz4-releases-1.9.3-1.10.0",
+  "project": "lz4",
+  "repository": "https://github.com/lz4/lz4",
+  "change": {
+    "reference": "https://github.com/lz4/lz4/tags",
+    "description": "Stable releases 1.9.3–1.10.0; adjacent release comparisons.",
+    "kind": "ordinary-sequential-releases"
+  },
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/0ddfba395c634ac915c7a1315e8c4d6f2bd03d8c/projects/lz4",
+  "architecture": "x86_64",
+  "format": "ELF64-little-endian",
+  "role": "library",
+  "runner": "ubuntu-24.04",
+  "recipe": "recipes/lz4.sh",
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/lz4",
+  "ldflags": "-Wl,--build-id=sha1",
+  "parallel_jobs": 2,
+  "limits": {
+    "source_archive_bytes": 16777216,
+    "source_expanded_bytes": 67108864,
+    "corpus_bytes": 33554432,
+    "workspace_checkpoint_bytes": 4294967296
+  },
+  "license": {
+    "spdx": "BSD-2-Clause",
+    "notice_sources": [
+      "lib/LICENSE",
+      "lib/xxhash.c",
+      "lib/xxhash.h"
+    ],
+    "review": "Library and incorporated xxHash notices reviewed at all three pinned revisions. Preserve copyright, conditions and disclaimers in binary distributions. Complete xxHash source files retain their embedded notices. GPL command-line programs and tests are not built."
+  },
+  "versions": [
+    {
+      "side": "v1",
+      "version": "1.9.3",
+      "tag": "v1.9.3",
+      "revision": "d44371841a2f1728a3f36839fd4b7e872d0927d3",
+      "source_date_epoch": 1605502775,
+      "source_archive_url": "https://codeload.github.com/lz4/lz4/tar.gz/d44371841a2f1728a3f36839fd4b7e872d0927d3",
+      "archive_root": "lz4-d44371841a2f1728a3f36839fd4b7e872d0927d3",
+      "target": "lib/liblz4.so.1.9.3",
+      "required_defined_symbols": [
+        "LZ4_versionNumber",
+        "LZ4_compress_default",
+        "LZ4_decompress_safe",
+        "LZ4F_getVersion"
+      ],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "v2",
+      "version": "1.9.4",
+      "tag": "v1.9.4",
+      "revision": "5ff839680134437dbf4678f3d0c7b371d84f4964",
+      "source_date_epoch": 1660603531,
+      "source_archive_url": "https://codeload.github.com/lz4/lz4/tar.gz/5ff839680134437dbf4678f3d0c7b371d84f4964",
+      "archive_root": "lz4-5ff839680134437dbf4678f3d0c7b371d84f4964",
+      "target": "lib/liblz4.so.1.9.4",
+      "required_defined_symbols": [
+        "LZ4_versionNumber",
+        "LZ4_compress_default",
+        "LZ4_decompress_safe",
+        "LZ4F_getVersion"
+      ],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "v3",
+      "version": "1.10.0",
+      "tag": "v1.10.0",
+      "revision": "ebb370ca83af193212df4dcbadcc5d87bc0de2f0",
+      "source_date_epoch": 1721582989,
+      "source_archive_url": "https://codeload.github.com/lz4/lz4/tar.gz/ebb370ca83af193212df4dcbadcc5d87bc0de2f0",
+      "archive_root": "lz4-ebb370ca83af193212df4dcbadcc5d87bc0de2f0",
+      "target": "lib/liblz4.so.1.10.0",
+      "required_defined_symbols": [
+        "LZ4_versionNumber",
+        "LZ4_compress_default",
+        "LZ4_decompress_safe",
+        "LZ4F_getVersion"
+      ],
+      "absent_defined_symbols": []
+    }
+  ]
+}

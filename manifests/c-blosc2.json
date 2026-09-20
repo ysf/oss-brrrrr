@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "pair_id": "c-blosc2-oss-fuzz-46460",
+  "project": "c-blosc2",
+  "repository": "https://github.com/Blosc/c-blosc2",
+  "change": {"reference": "https://api.osv.dev/v1/vulns/OSV-2022-322", "description": "Immediate parent and fix commit associated with OSS-Fuzz issue 46460; the fix rejects buffers without the expected b2frame magic among other warning fixes.", "kind": "oss-fuzz-fix-commit", "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065"},
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/366f8b394247b5b8165f05d6321c3da845e00065/projects/c-blosc2",
+  "architecture": "x86_64", "format": "ELF64-little-endian", "role": "library", "runner": "ubuntu-24.04", "recipe": "recipes/c-blosc2.sh",
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/c-blosc2", "ldflags": "-Wl,--build-id=sha1", "parallel_jobs": 2,
+  "limits": {"source_archive_bytes": 33554432, "source_expanded_bytes": 268435456, "corpus_bytes": 67108864, "workspace_checkpoint_bytes": 4294967296},
+  "license": {"spdx": "BSD-3-Clause", "notice_sources": ["LICENSE.txt"], "review": "The upstream BSD three-clause notice is retained. Only the shared compression library is built; examples, tests, benchmarks and fuzzers are excluded."},
+  "versions": [
+    {"side": "parent", "version": "46460-parent", "tag": "886d4c9b", "revision": "886d4c9b78334d1e854be60e67c95f37547685fe", "source_date_epoch": 1655196426, "source_archive_url": "https://codeload.github.com/Blosc/c-blosc2/tar.gz/886d4c9b78334d1e854be60e67c95f37547685fe", "archive_root": "c-blosc2-886d4c9b78334d1e854be60e67c95f37547685fe", "target": "build/blosc/libblosc2.so", "required_defined_symbols": ["blosc_init", "blosc2_compress", "blosc2_schunk_from_buffer"], "absent_defined_symbols": []},
+    {"side": "fix", "version": "46460-fixed", "tag": "7f4574f5", "revision": "7f4574f51ad7db56fc13de89e13e7893b1a82189", "source_date_epoch": 1655196426, "source_archive_url": "https://codeload.github.com/Blosc/c-blosc2/tar.gz/7f4574f51ad7db56fc13de89e13e7893b1a82189", "archive_root": "c-blosc2-7f4574f51ad7db56fc13de89e13e7893b1a82189", "target": "build/blosc/libblosc2.so", "required_defined_symbols": ["blosc_init", "blosc2_compress", "blosc2_schunk_from_buffer"], "absent_defined_symbols": []}
+  ]
+}
