@@ -15,6 +15,7 @@
     {"project": "libvips", "osv_id": "OSV-2022-323", "oss_fuzz_id": "46436", "bug_type": "heap-buffer-overflow", "affected_releases": [], "pair_manifest": "manifests/libvips.json", "source": "https://api.osv.dev/v1/vulns/OSV-2022-323"},
     {"project": "libjxl", "osv_id": "OSV-2022-296", "oss_fuzz_id": "46243", "bug_type": "negative-size-param", "affected_releases": [], "pair_manifest": "manifests/libjxl.json", "source": "https://api.osv.dev/v1/vulns/OSV-2022-296"},
     {"project": "muparser", "osv_id": "OSV-2020-1093", "oss_fuzz_id": "23330", "bug_type": "heap-buffer-overflow", "affected_releases": [], "pair_manifest": "manifests/muparser.json", "source": "https://api.osv.dev/v1/vulns/OSV-2020-1093"},
-    {"project": "libplist", "osv_id": "OSV-2023-6", "oss_fuzz_id": "55035", "bug_type": "heap-buffer-overflow", "affected_releases": null, "pair_manifest": "manifests/libplist.json", "source": "https://api.osv.dev/v1/vulns/OSV-2023-6"}
+    {"project": "libplist", "osv_id": "OSV-2023-6", "oss_fuzz_id": "55035", "bug_type": "heap-buffer-overflow", "affected_releases": null, "pair_manifest": "manifests/libplist.json", "source": "https://api.osv.dev/v1/vulns/OSV-2023-6"},
+    {"project": "openthread", "osv_id": "OSV-2020-380", "oss_fuzz_id": "13619", "bug_type": "stack-buffer-overflow", "affected_releases": null, "pair_manifest": "manifests/openthread.json", "source": "https://api.osv.dev/v1/vulns/OSV-2020-380"}
   ]
 }
