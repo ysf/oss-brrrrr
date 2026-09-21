@@ -1,6 +1,6 @@
 # oss-brrrrr
 
-x86-64 binaries including debug symbols, but without sanitizers or fuzzing harnesses.
+x86-64 libraries and linked OSS-Fuzz harnesses including debug symbols, but without sanitizers.
 
 | Project | Crash type | Fix pattern | Versions | Download |
 |---|---|---|---|---|

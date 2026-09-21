@@ -14,6 +14,7 @@
   "role": "library",
   "runner": "ubuntu-24.04",
   "recipe": "recipes/zlib.sh",
+  "harness": {"name": "zlib_uncompress_fuzzer", "source_path": "projects/zlib/zlib_uncompress_fuzzer.cc", "target": "build/zlib_uncompress_fuzzer", "oss_fuzz_revision": "0ddfba395c634ac915c7a1315e8c4d6f2bd03d8c", "sources": [{"repository": "https://github.com/google/oss-fuzz", "revision": "0ddfba395c634ac915c7a1315e8c4d6f2bd03d8c", "path": "projects/zlib/zlib_uncompress_fuzzer.cc", "destination": "zlib_uncompress_fuzzer.cc", "sha256": "518f9e2d49f4d64ffff78fafe3422d2441ce23e357b62d0e8c661fa6c7d3d9a9"}]},
   "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/zlib",
   "ldflags": "-Wl,--build-id=sha1",
   "parallel_jobs": 2,

@@ -54,7 +54,8 @@ class Integrity(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary, patch.object(pilot, "ROOT", Path(temporary)):
             for name in ("manifests/libpng.json", "manifests/lz4.json", "recipes/lz4.sh",
                          "recipes/libpng.sh", "recipes/zlib-dependency.sh", "scripts/pilot.py",
-                         ".github/workflows/pilot.yml", "tests/test_integrity.py"):
+                         "scripts/harness_main.cc", ".github/workflows/pilot.yml",
+                         "tests/test_integrity.py"):
                 path = pilot.ROOT / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(name)
@@ -75,6 +76,20 @@ class Integrity(unittest.TestCase):
                 ("archive_root", "../library"), ("target", "/tmp/library.so")):
             with self.subTest(field=field), self.assertRaises(ValueError):
                 pilot.validate_source({**source, field: value}, "https://github.com/owner/library")
+
+    def test_harness_requires_pinned_safe_sources(self):
+        harness = {"name": "fuzzer", "source_path": "fuzz/target.cc",
+                   "target": "build/fuzzer", "oss_fuzz_revision": "a" * 40,
+                   "sources": [{"repository": "https://github.com/google/oss-fuzz",
+                                "revision": "b" * 40, "path": "projects/demo/fuzzer.cc",
+                                "destination": "fuzzer.cc", "sha256": "c" * 64}]}
+        pilot.validate_harness(harness)
+        for field, value in (("target", "../fuzzer"), ("source_path", "/tmp/fuzzer")):
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                pilot.validate_harness({**harness, field: value})
+        bad_source = {**harness["sources"][0], "sha256": "not-a-hash"}
+        with self.assertRaises(ValueError):
+            pilot.validate_harness({**harness, "sources": [bad_source]})
 
     def test_archive_extraction_rejects_escape_links_and_resource_overruns(self):
         source = {"source_archive_url": "https://codeload.github.com/owner/library/tar.gz/" + "a" * 40,

@@ -15,6 +15,7 @@
   "role": "library",
   "runner": "ubuntu-24.04",
   "recipe": "recipes/wasm3.sh",
+  "harness": {"name": "fuzzer", "source_path": "platforms/app_fuzz/fuzzer.c", "target": "build/wasm3_fuzzer", "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065"},
   "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/wasm3",
   "ldflags": "-Wl,--build-id=sha1",
   "parallel_jobs": 2,
@@ -27,7 +28,7 @@
   "license": {
     "spdx": "MIT",
     "notice_sources": ["LICENSE"],
-    "review": "MIT license notice retained. The upstream interpreter library is rebuilt as a position-independent shared analysis object; the app, WASI integrations and fuzz harness are not built."
+    "review": "MIT license notice retained. The interpreter library is rebuilt as a position-independent shared analysis object and linked OSS-Fuzz harness; the app and WASI integrations are excluded."
   },
   "versions": [
     {

@@ -14,6 +14,7 @@
   "role": "library",
   "runner": "ubuntu-24.04",
   "recipe": "recipes/lz4.sh",
+  "harness": {"name": "decompress_fuzzer", "source_path": "ossfuzz/decompress_fuzzer.c", "target": "ossfuzz/decompress_fuzzer", "oss_fuzz_revision": "0ddfba395c634ac915c7a1315e8c4d6f2bd03d8c"},
   "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/lz4",
   "ldflags": "-Wl,--build-id=sha1",
   "parallel_jobs": 2,

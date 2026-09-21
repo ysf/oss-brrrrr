@@ -14,6 +14,7 @@
   "role": "library",
   "runner": "ubuntu-24.04",
   "recipe": "recipes/libpng.sh",
+  "harness": {"name": "libpng_read_fuzzer", "source_path": "contrib/oss-fuzz/libpng_read_fuzzer.cc", "target": "build/libpng_read_fuzzer", "oss_fuzz_revision": "0ddfba395c634ac915c7a1315e8c4d6f2bd03d8c"},
   "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/libpng",
   "ldflags": "-Wl,--build-id=sha1",
   "parallel_jobs": 2,

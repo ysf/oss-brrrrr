@@ -16,6 +16,7 @@
   "role": "library",
   "runner": "ubuntu-24.04",
   "recipe": "recipes/simdjson.sh",
+  "harness": {"name": "fuzz_ondemand", "source_path": "fuzz/fuzz_ondemand.cpp", "target": "harness-build/fuzz_ondemand", "oss_fuzz_revision": "e004f85123eab0ba61ba5371c857239f97c1df27"},
   "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/simdjson",
   "ldflags": "-Wl,--build-id=sha1",
   "parallel_jobs": 2,
@@ -28,7 +29,7 @@
   "license": {
     "spdx": "Apache-2.0",
     "notice_sources": ["LICENSE", "AUTHORS"],
-    "review": "Apache-2.0 license and upstream authors list retained. The source tree has no NOTICE file at either pinned revision; tests, tools, benchmarks and fuzz harnesses are not built."
+    "review": "Apache-2.0 license and upstream authors list retained. The source tree has no NOTICE file at either pinned revision; the library and linked fuzz_ondemand harness are built while other tests, tools, benchmarks and fuzz harnesses are excluded."
   },
   "versions": [
     {

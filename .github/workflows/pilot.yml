@@ -44,12 +44,14 @@ jobs:
       - name: Check metadata integrity behavior
         run: python3 -m unittest discover -s tests -v
       - name: Install project build dependencies
-        if: env.REUSE_RUN_ID == '' && contains(fromJSON('["libass","libredwg","libvips","libjxl"]'), env.PROJECT)
+        if: env.REUSE_RUN_ID == '' && contains(fromJSON('["file","pcapplusplus","libass","libredwg","libvips","libjxl"]'), env.PROJECT)
         shell: bash
         run: |
           set -euo pipefail
           sudo apt-get update
           case "$PROJECT" in
+            file) sudo apt-get install -y libbz2-dev liblz4-dev liblzma-dev libzstd-dev zlib1g-dev ;;
+            pcapplusplus) sudo apt-get install -y libpcap-dev ;;
             libass) sudo apt-get install -y libfreetype-dev libfribidi-dev libharfbuzz-dev libfontconfig1-dev ;;
             libredwg) sudo apt-get install -y bison flex libpcre2-dev ;;
             libvips) sudo apt-get install -y libglib2.0-dev libexpat1-dev libexif-dev gettext gtk-doc-tools ;;

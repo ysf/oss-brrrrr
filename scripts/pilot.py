@@ -50,7 +50,7 @@ def command(*args):
 
 def recipe_identity(spec):
     paths = [f"manifests/{spec['project']}.json", spec["recipe"], "scripts/pilot.py",
-             ".github/workflows/pilot.yml", "tests/test_integrity.py"]
+             "scripts/harness_main.cc", ".github/workflows/pilot.yml", "tests/test_integrity.py"]
     paths.extend(dependency["recipe"] for dependency in spec.get("dependencies", []))
     return {name: digest(ROOT / name) for name in sorted(set(paths))}
 
@@ -135,6 +135,24 @@ def validate_source(source, repository):
         raise ValueError("Invalid source timestamp")
 
 
+def validate_harness(harness):
+    if (not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", harness["name"])
+            or not re.fullmatch(r"[0-9a-f]{40}", harness["oss_fuzz_revision"])):
+        raise ValueError("Invalid harness identity")
+    relative_path(harness["source_path"])
+    relative_path(harness["target"])
+    for source in harness.get("sources", []):
+        repository = urllib.parse.urlsplit(source["repository"])
+        if (repository.scheme != "https" or repository.netloc != "github.com"
+                or repository.query or repository.fragment
+                or not re.fullmatch(r"/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repository.path)
+                or not re.fullmatch(r"[0-9a-f]{40}", source["revision"])
+                or not re.fullmatch(r"[0-9a-f]{64}", source["sha256"])):
+            raise ValueError("Invalid harness source provenance")
+        relative_path(source["path"])
+        relative_path(source["destination"])
+
+
 def validate_spec(spec):
     if (spec["schema_version"] != 1 or spec["project"] not in PROJECTS
             or len(spec["versions"]) < 2
@@ -149,6 +167,11 @@ def validate_spec(spec):
         if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", version["side"]):
             raise ValueError("Unsafe release identifier")
         validate_source(version, spec["repository"])
+    validate_harness(spec["harness"])
+    expected_recipe = (f"https://github.com/google/oss-fuzz/tree/"
+                       f"{spec['harness']['oss_fuzz_revision']}/projects/{spec['project']}")
+    if spec["oss_fuzz_recipe"] != expected_recipe:
+        raise ValueError("OSS-Fuzz recipe must match the pinned harness revision")
     dependencies = spec.get("dependencies", [])
     if len({dependency["name"] for dependency in dependencies}) != len(dependencies):
         raise ValueError("Dependency names must be unique")
@@ -192,18 +215,22 @@ def verify_inventory(directory, pair):
         raise ValueError("Checksum index mismatch")
 
 
-def inspect(binary, version):
+def inspect(binary, required_symbols, absent_symbols=(), *, shared):
     with binary.open("rb") as stream:
         header = stream.read(20)
-    if (header[:6] != b"\x7fELF\x02\x01" or int.from_bytes(header[16:18], "little") != 3
+    elf_type = int.from_bytes(header[16:18], "little")
+    if (header[:6] != b"\x7fELF\x02\x01" or elf_type not in ({3} if shared else {2, 3})
             or int.from_bytes(header[18:20], "little") != 62):
-        raise ValueError("Expected little-endian x86-64 ELF shared library")
-    symbols = command("nm", "-D", "--defined-only", str(binary))
+        raise ValueError("Expected little-endian x86-64 ELF binary")
+    arguments = ["nm"]
+    if shared:
+        arguments.append("-D")
+    symbols = command(*arguments, "--defined-only", str(binary))
     names = {line.split()[-1].split("@")[0] for line in symbols.splitlines() if line.split()}
-    if not set(version["required_defined_symbols"]) <= names:
-        raise ValueError("Required library symbols not defined")
-    if set(version["absent_defined_symbols"]) & names:
-        raise ValueError("Unexpected library symbols defined")
+    if not set(required_symbols) <= names:
+        raise ValueError("Required binary symbols not defined")
+    if set(absent_symbols) & names:
+        raise ValueError("Unexpected binary symbols defined")
     return command("readelf", "-h", "-d", "-n", "-S", str(binary)) + "\n" + symbols
 
 
@@ -272,9 +299,11 @@ def verify(directory, spec, expected_identity=None):
     for version in spec["versions"]:
         prefix = stem(spec, version)
         expected_names.update(prefix + suffix for suffix in
-                              (".so", ".so.debug", ".json", ".LICENSE.txt", ".elf.txt", ".build.log"))
+                              (".so", ".so.debug", ".harness", ".harness.debug", ".json",
+                               ".LICENSE.txt", ".elf.txt", ".harness.elf.txt", ".build.log"))
         meta = json.loads((directory / (prefix + ".json")).read_text())
         verify_provenance(meta, spec, version, prefix, pair, spec)
+        harness = spec["harness"]
         if (meta["side"] != version["side"] or meta["role"] != "library"
                 or meta["architecture"] != "x86_64" or meta["format"] != spec["format"]
                 or meta["change"] != spec["change"]
@@ -284,20 +313,37 @@ def verify(directory, spec, expected_identity=None):
                     "code_presence": "defined-dynamic-symbols-confirmed",
                     "required_defined_symbols": version["required_defined_symbols"],
                     "absent_defined_symbols": version["absent_defined_symbols"],
-                    "pair_validation": "not-performed", "evidence": prefix + ".elf.txt"}):
+                    "pair_validation": "not-performed", "evidence": prefix + ".elf.txt"}
+                or meta["harness"]["name"] != harness["name"]
+                or meta["harness"]["source_path"] != harness["source_path"]
+                or meta["harness"]["target"] != harness["target"]
+                or meta["harness"]["oss_fuzz_revision"] != harness["oss_fuzz_revision"]
+                or meta["harness"]["sources"] != harness.get("sources", [])
+                or meta["harness"]["verification"] != {
+                    "entrypoint": "LLVMFuzzerTestOneInput",
+                    "evidence": prefix + ".harness.elf.txt"}):
             raise ValueError("Artifact provenance or status mismatch")
         for field, suffix in (("binary", ".so"), ("debug_symbols", ".so.debug")):
             name = prefix + suffix
             if meta[field] != {"file": name, **record(directory / name)}:
                 raise ValueError("Artifact manifest hash mismatch")
-        inspect(directory / (prefix + ".so"), version)
-        debug_sections = command("readelf", "-S", str(directory / (prefix + ".so.debug")))
-        if ".debug_info" not in debug_sections:
-            raise ValueError("Missing separate DWARF information")
-        debuglink = command("readelf", "--debug-dump=links", "--debug-dump=no-follow-links",
-                            "--debug-dump=do-not-use-debuginfod", str(directory / (prefix + ".so")))
-        if prefix + ".so.debug" not in debuglink:
-            raise ValueError("Missing debug companion link")
+        for field, suffix in (("binary", ".harness"), ("debug_symbols", ".harness.debug")):
+            name = prefix + suffix
+            if meta["harness"][field] != {"file": name, **record(directory / name)}:
+                raise ValueError("Harness manifest hash mismatch")
+        inspect(directory / (prefix + ".so"), version["required_defined_symbols"],
+                version["absent_defined_symbols"], shared=True)
+        inspect(directory / (prefix + ".harness"), ["LLVMFuzzerTestOneInput"], shared=False)
+        for binary_suffix, debug_suffix in ((".so", ".so.debug"),
+                                            (".harness", ".harness.debug")):
+            debug_sections = command("readelf", "-S", str(directory / (prefix + debug_suffix)))
+            if ".debug_info" not in debug_sections:
+                raise ValueError("Missing separate DWARF information")
+            debuglink = command("readelf", "--debug-dump=links", "--debug-dump=no-follow-links",
+                                "--debug-dump=do-not-use-debuginfod",
+                                str(directory / (prefix + binary_suffix)))
+            if prefix + debug_suffix not in debuglink:
+                raise ValueError("Missing debug companion link")
     if set(pair["files"]) != expected_names:
         raise ValueError("Unexpected series contents")
     if sum(path.stat().st_size for path in directory.iterdir()) > spec["limits"]["corpus_bytes"]:
@@ -359,6 +405,40 @@ def fetch_source(version, destination, limits):
     return source, {"archive_url": url, "archive_root": version["archive_root"], **record(archive)}
 
 
+def fetch_harness_sources(harness, destination):
+    destination.mkdir()
+    for source in harness.get("sources", []):
+        repository = urllib.parse.urlsplit(source["repository"])
+        url = (f"https://raw.githubusercontent.com{repository.path}/"
+               f"{source['revision']}/{source['path']}")
+        target = destination / relative_path(source["destination"])
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with urllib.request.urlopen(url, timeout=60) as response, target.open("xb") as output:
+            if response.geturl() != url:
+                raise ValueError("Unexpected harness source redirect")
+            total = 0
+            while block := response.read(1024 * 1024):
+                total += len(block)
+                if total > 1024 * 1024:
+                    raise ValueError("Harness source exceeds pilot budget")
+                output.write(block)
+        if digest(target) != source["sha256"]:
+            raise ValueError("Harness source checksum mismatch")
+
+
+def export_elf(source, out, name, required_symbols, *, shared):
+    binary = out / name
+    debug = out / (name + ".debug")
+    shutil.copyfile(source, binary)
+    command("objcopy", "--only-keep-debug", str(binary), str(debug))
+    command("objcopy", "--strip-debug", str(binary))
+    command("objcopy", f"--add-gnu-debuglink={debug}", str(binary))
+    evidence = out / ((name.removesuffix(".so") if shared else name) + ".elf.txt")
+    evidence.write_text(inspect(binary, required_symbols, shared=shared))
+    return ({"file": binary.name, **record(binary)},
+            {"file": debug.name, **record(debug)})
+
+
 def build_component(spec, version, out, work, toolchain, build_origin, *, dependency=False):
     started = time.monotonic()
     component = version if dependency else spec
@@ -372,18 +452,26 @@ def build_component(spec, version, out, work, toolchain, build_origin, *, depend
             with (source / name).open("rb") as original:
                 shutil.copyfileobj(original, notice)
             notice.write(b"\n")
+    harness_sources = location / "harness-sources"
+    if not dependency:
+        fetch_harness_sources(spec["harness"], harness_sources)
     env = {"PATH": PATH, "HOME": str(location), "LC_ALL": "C", "TZ": "UTC",
            "CFLAGS": component["cflags"].format(source=source),
            "CXXFLAGS": component["cflags"].format(source=source),
            "LDFLAGS": component.get("ldflags", spec["ldflags"]),
            "SOURCE_DATE_EPOCH": str(version["source_date_epoch"]),
            "DEPENDENCY_PREFIX": str(work / "dependencies" / "install"),
+           "HARNESS_MAIN": str(ROOT / "scripts/harness_main.cc"),
+           "HARNESS_SOURCES": str(harness_sources),
            "GITHUB_ACTIONS": "true", "RUNNER_ENVIRONMENT": "github-hosted",
            "GITHUB_REPOSITORY": "ysf/oss-brrrrr"}
+    arguments = ["sh", str(ROOT / component["recipe"]), version["target"]]
+    if not dependency:
+        arguments.append(spec["harness"]["target"])
     log_path = ROOT / "diagnostics" / (prefix + ".build.log")
     with log_path.open("x") as log:
-        subprocess.run(["sh", str(ROOT / component["recipe"]), version["target"]],
-                       cwd=source, env=env, stdout=log, stderr=subprocess.STDOUT, check=True)
+        subprocess.run(arguments, cwd=source, env=env, stdout=log,
+                       stderr=subprocess.STDOUT, check=True)
     shutil.copyfile(log_path, out / log_path.name)
     used = int(command("du", "-s", "-B1", str(work)).split()[0])
     if used > spec["limits"]["workspace_checkpoint_bytes"]:
@@ -405,25 +493,29 @@ def build_component(spec, version, out, work, toolchain, build_origin, *, depend
                     built_output={"file": version["target"], **record(source / version["target"])})
         meta.update({field: version[field] for field in ("linkage", "bundled", "purpose") if field in version})
     else:
-        binary = out / (prefix + ".so")
-        debug = out / (prefix + ".so.debug")
-        shutil.copyfile(source / version["target"], binary)
-        command("objcopy", "--only-keep-debug", str(binary), str(debug))
-        command("objcopy", "--strip-debug", str(binary))
-        command("objcopy", "--add-gnu-debuglink=" + str(debug), str(binary))
-        (out / (prefix + ".elf.txt")).write_text(inspect(binary, version))
+        binary, debug = export_elf(source / version["target"], out, prefix + ".so",
+                                   version["required_defined_symbols"], shared=True)
+        harness_binary, harness_debug = export_elf(
+            source / spec["harness"]["target"], out, prefix + ".harness",
+            ["LLVMFuzzerTestOneInput"], shared=False)
         meta.update(
             side=version["side"], role=spec["role"], architecture=spec["architecture"],
             format=spec["format"], change=spec["change"], dependencies=dependency_entries(spec),
-            binary={"file": binary.name, **record(binary)},
-            debug_symbols={"file": debug.name, **record(debug)},
+            binary=binary, debug_symbols=debug,
+            harness={"name": spec["harness"]["name"], "target": spec["harness"]["target"],
+                     "source_path": spec["harness"]["source_path"],
+                     "oss_fuzz_revision": spec["harness"]["oss_fuzz_revision"],
+                     "sources": spec["harness"].get("sources", []),
+                     "binary": harness_binary, "debug_symbols": harness_debug,
+                     "verification": {"entrypoint": "LLVMFuzzerTestOneInput",
+                                      "evidence": prefix + ".harness.elf.txt"}},
             verification={"source_revision": "pinned-codeload-url",
                           "code_presence": "defined-dynamic-symbols-confirmed",
                           "required_defined_symbols": version["required_defined_symbols"],
                           "absent_defined_symbols": version["absent_defined_symbols"],
                           "pair_validation": "not-performed", "evidence": prefix + ".elf.txt"},
             limitations=["Adjacent upstream releases, not single-change pairs; no vulnerability or correctness claim",
-                         "No target binary execution, fuzzing or performance validation",
+                         "Harness exported for static analysis; no fuzzing or behavioral validation performed",
                          "Runner image and packages recorded, not a hermetic toolchain archive",
                          "Disk checkpoint is not a high-water mark; no whole-runner disk peak measured",
                          "Symbol presence is not proof of behavioral effect or code-path execution"])
