@@ -33,7 +33,7 @@ set -eu
   --disable-docs
 make -j2 V=1 LIB_FUZZING_ENGINE="$HARNESS_MAIN" \
   CFLAGS="$CFLAGS -Wall -Wextra -Wshadow -std=c99 -pedantic-errors -D_BSD_SOURCE=1 -D_DEFAULT_SOURCE=1 -Wno-error" \
-  CXXFLAGS="$CXXFLAGS -Wall -Wextra -Wshadow -std=gnu++98 -Wno-c++14-compat -fno-exceptions -D_BSD_SOURCE=1 -D_DEFAULT_SOURCE=1 -Wno-error"
+  CXXFLAGS="$CXXFLAGS -Wall -Wextra -Wshadow -std=gnu++11 -Wno-c++14-compat -fno-exceptions -D_BSD_SOURCE=1 -D_DEFAULT_SOURCE=1 -Wno-error"
 mkdir build harness-build
 c++ -shared -Wl,--whole-archive src/core/libopenthread-ftd.a \
   -Wl,--no-whole-archive $LDFLAGS -o "$1"
