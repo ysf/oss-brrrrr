@@ -1,5 +1,6 @@
 #!/bin/sh
 set -eu
+printf '%s\n' 2.2.0 > .tarball-version
 ./autogen.sh --without-cython --without-tests --enable-static --enable-shared
 make -j2 V=1
 mkdir harness-build
