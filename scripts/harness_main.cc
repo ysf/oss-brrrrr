@@ -6,6 +6,7 @@
 #include <vector>
 
 extern "C" int LLVMFuzzerTestOneInput(const std::uint8_t *, std::size_t);
+extern "C" int LLVMFuzzerInitialize(int *, char ***) __attribute__((weak));
 
 static int run(std::istream &input) {
     const std::vector<std::uint8_t> data{std::istreambuf_iterator<char>(input), {}};
@@ -13,6 +14,8 @@ static int run(std::istream &input) {
 }
 
 int main(int argc, char **argv) {
+    if (LLVMFuzzerInitialize && LLVMFuzzerInitialize(&argc, &argv))
+        return 1;
     if (argc == 1)
         return run(std::cin);
     for (int i = 1; i < argc; ++i) {

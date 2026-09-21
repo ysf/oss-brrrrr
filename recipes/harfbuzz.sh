@@ -12,4 +12,4 @@ cmake -S . -B harness-build \
 cmake --build harness-build --target harfbuzz-subset --parallel 2 --verbose
 c++ $CXXFLAGS -Isrc test/fuzzing/hb-subset-fuzzer.cc "$HARNESS_MAIN" \
   harness-build/libharfbuzz-subset.a harness-build/libharfbuzz.a \
-  $LDFLAGS -pthread -lm -o "$2"
+  $LDFLAGS -Wl,--allow-multiple-definition -pthread -lm -o "$2"
