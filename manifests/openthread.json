@@ -21,7 +21,7 @@
     "target": "harness-build/ncp-uart-received-fuzzer",
     "oss_fuzz_revision": "bc4ab87d3299de4bb8eafe3b9703b1cc72fc13db"
   },
-  "cflags": "-O2 -g -fno-omit-frame-pointer -fPIC -Wno-error=array-parameter -ffile-prefix-map={source}=/usr/src/openthread",
+  "cflags": "-O2 -g -fno-omit-frame-pointer -fPIC -ffile-prefix-map={source}=/usr/src/openthread",
   "ldflags": "-Wl,--build-id=sha1",
   "parallel_jobs": 2,
   "limits": {
