@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        project: [zlib, lz4, libpng, lwan, pcapplusplus, harfbuzz, simdjson, wasm3, file, c-ares, quickjs, libass, c-blosc2, libredwg, libvips, libjxl, muparser]
+        project: [zlib, lz4, libpng, lwan, pcapplusplus, harfbuzz, simdjson, wasm3, file, c-ares, quickjs, libass, c-blosc2, libredwg, libvips, libjxl, muparser, libplist]
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
@@ -83,7 +83,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        project: [zlib, lz4, libpng, lwan, pcapplusplus, harfbuzz, simdjson, wasm3, file, c-ares, quickjs, libass, c-blosc2, libredwg, libvips, libjxl, muparser]
+        project: [zlib, lz4, libpng, lwan, pcapplusplus, harfbuzz, simdjson, wasm3, file, c-ares, quickjs, libass, c-blosc2, libredwg, libvips, libjxl, muparser, libplist]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:

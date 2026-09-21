@@ -21,3 +21,4 @@ x86-64 libraries without sanitizers but oss-fuzz harnesses and debug symbols.
 | libvips | Heap buffer overflow | No isolated fix | OSS-Fuzz 46436 parent/fix snapshots (2) | [Release](https://github.com/ysf/oss-brrrrr/releases/tag/libvips-oss-fuzz-46436-parent-fix) |
 | libjxl | Negative size parameter | Empty input handling | OSS-Fuzz 46243 parent/fix snapshots (2) | [Release](https://github.com/ysf/oss-brrrrr/releases/tag/libjxl-oss-fuzz-46243-parent-fix) |
 | muparser | Heap buffer overflow | Parser state validation | OSS-Fuzz 23330 parent/fix snapshots (2) | [Release](https://github.com/ysf/oss-brrrrr/releases/tag/muparser-oss-fuzz-23330-parent-fix) |
+| libplist | Heap buffer overflow | Pointer/end guard | OSS-Fuzz 55035 parent/fix snapshots (2) | release pending |
