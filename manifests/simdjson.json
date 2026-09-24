@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "pair_id": "simdjson-fix-1273",
+  "project": "simdjson",
+  "repository": "https://github.com/simdjson/simdjson",
+  "change": {
+    "reference": "https://github.com/simdjson/simdjson/commit/0b82f071157db9848f45dd8cf07ced05c8eb8022",
+    "description": "Immediate parent and fix commit for the number-parsing read overflow reported as simdjson issue 1273.",
+    "kind": "exact-fix-commit",
+    "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/e004f85123eab0ba61ba5371c857239f97c1df27/projects/simdjson",
+    "oss_fuzz_revision": "e004f85123eab0ba61ba5371c857239f97c1df27"
+  },
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/e004f85123eab0ba61ba5371c857239f97c1df27/projects/simdjson",
+  "architecture": "x86_64",
+  "format": "ELF64-little-endian",
+  "role": "library",
+  "runner": "ubuntu-24.04",
+  "recipe": "recipes/simdjson.sh",
+  "harness": {"name": "fuzz_ondemand", "source_path": "fuzz/fuzz_ondemand.cpp", "target": "harness-build/fuzz_ondemand", "oss_fuzz_revision": "e004f85123eab0ba61ba5371c857239f97c1df27"},
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/simdjson",
+  "ldflags": "-Wl,--build-id=sha1",
+  "parallel_jobs": 2,
+  "limits": {
+    "source_archive_bytes": 33554432,
+    "source_expanded_bytes": 268435456,
+    "corpus_bytes": 134217728,
+    "workspace_checkpoint_bytes": 4294967296
+  },
+  "license": {
+    "spdx": "Apache-2.0",
+    "notice_sources": ["LICENSE", "AUTHORS"],
+    "review": "Apache-2.0 license and upstream authors list retained. The source tree has no NOTICE file at either pinned revision; the library and linked fuzz_ondemand harness are built while other tests, tools, benchmarks and fuzz harnesses are excluded."
+  },
+  "versions": [
+    {
+      "side": "parent",
+      "version": "1273-parent",
+      "tag": "265db2e5",
+      "revision": "265db2e533d4cdc8f7548717b911a92b6a7c9ec9",
+      "source_date_epoch": 1604225641,
+      "source_archive_url": "https://codeload.github.com/simdjson/simdjson/tar.gz/265db2e533d4cdc8f7548717b911a92b6a7c9ec9",
+      "archive_root": "simdjson-265db2e533d4cdc8f7548717b911a92b6a7c9ec9",
+      "target": "build/libsimdjson.so",
+      "required_defined_symbols": ["_ZN8simdjson13validate_utf8EPKcm", "_ZN8simdjson6minifyEPKcmPcRm"],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "fix",
+      "version": "1273-fixed",
+      "tag": "0b82f071",
+      "revision": "0b82f071157db9848f45dd8cf07ced05c8eb8022",
+      "source_date_epoch": 1604251641,
+      "source_archive_url": "https://codeload.github.com/simdjson/simdjson/tar.gz/0b82f071157db9848f45dd8cf07ced05c8eb8022",
+      "archive_root": "simdjson-0b82f071157db9848f45dd8cf07ced05c8eb8022",
+      "target": "build/libsimdjson.so",
+      "required_defined_symbols": ["_ZN8simdjson13validate_utf8EPKcm", "_ZN8simdjson6minifyEPKcmPcRm"],
+      "absent_defined_symbols": []
+    }
+  ]
+}

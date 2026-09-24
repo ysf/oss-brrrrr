@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "pair_id": "libpng-releases-1.6.50-1.6.58",
+  "project": "libpng",
+  "repository": "https://github.com/pnggroup/libpng",
+  "change": {
+    "reference": "https://github.com/pnggroup/libpng/tags",
+    "description": "Stable releases 1.6.50–1.6.58; adjacent release comparisons.",
+    "kind": "ordinary-sequential-releases"
+  },
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/0ddfba395c634ac915c7a1315e8c4d6f2bd03d8c/projects/libpng",
+  "architecture": "x86_64",
+  "format": "ELF64-little-endian",
+  "role": "library",
+  "runner": "ubuntu-24.04",
+  "recipe": "recipes/libpng.sh",
+  "harness": {"name": "libpng_read_fuzzer", "source_path": "contrib/oss-fuzz/libpng_read_fuzzer.cc", "target": "build/libpng_read_fuzzer", "oss_fuzz_revision": "0ddfba395c634ac915c7a1315e8c4d6f2bd03d8c"},
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/libpng",
+  "ldflags": "-Wl,--build-id=sha1",
+  "parallel_jobs": 2,
+  "limits": {
+    "source_archive_bytes": 16777216,
+    "source_expanded_bytes": 67108864,
+    "corpus_bytes": 33554432,
+    "workspace_checkpoint_bytes": 4294967296
+  },
+  "license": {
+    "spdx": "libpng-2.0",
+    "notice_sources": [
+      "LICENSE"
+    ],
+    "review": "PNG Reference Library License version 2 reviewed at all pinned revisions. Retain upstream attribution and notices; mark source modifications. Contrib tools and tests are not built. zlib is a separately recorded shared build dependency, not included in the distributed libpng payload."
+  },
+  "versions": [
+    {
+      "side": "v1",
+      "version": "1.6.50",
+      "tag": "v1.6.50",
+      "revision": "2b978915d82377df13fcbb1fb56660195ded868a",
+      "source_date_epoch": 1751403000,
+      "source_archive_url": "https://codeload.github.com/pnggroup/libpng/tar.gz/2b978915d82377df13fcbb1fb56660195ded868a",
+      "archive_root": "libpng-2b978915d82377df13fcbb1fb56660195ded868a",
+      "target": "build/libpng16.so.16.50.0",
+      "required_defined_symbols": [
+        "png_access_version_number",
+        "png_create_read_struct",
+        "png_create_write_struct",
+        "png_read_info",
+        "png_write_info"
+      ],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "v2",
+      "version": "1.6.51",
+      "tag": "v1.6.51",
+      "revision": "49363adcfaf098748d7a4c8c624ad8c45a8c3a86",
+      "source_date_epoch": 1763758860,
+      "source_archive_url": "https://codeload.github.com/pnggroup/libpng/tar.gz/49363adcfaf098748d7a4c8c624ad8c45a8c3a86",
+      "archive_root": "libpng-49363adcfaf098748d7a4c8c624ad8c45a8c3a86",
+      "target": "build/libpng16.so.16.51.0",
+      "required_defined_symbols": [
+        "png_access_version_number",
+        "png_create_read_struct",
+        "png_create_write_struct",
+        "png_read_info",
+        "png_write_info"
+      ],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "v3",
+      "version": "1.6.52",
+      "tag": "v1.6.52",
+      "revision": "fbed16182b92eeb3a06d96e49f0836d450318098",
+      "source_date_epoch": 1764791294,
+      "source_archive_url": "https://codeload.github.com/pnggroup/libpng/tar.gz/fbed16182b92eeb3a06d96e49f0836d450318098",
+      "archive_root": "libpng-fbed16182b92eeb3a06d96e49f0836d450318098",
+      "target": "build/libpng16.so.16.52.0",
+      "required_defined_symbols": [
+        "png_access_version_number",
+        "png_create_read_struct",
+        "png_create_write_struct",
+        "png_read_info",
+        "png_write_info"
+      ],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "v4",
+      "version": "1.6.53",
+      "tag": "v1.6.53",
+      "revision": "4e3f57d50f552841550a36eabbb3fbcecacb7750",
+      "source_date_epoch": 1764971198,
+      "source_archive_url": "https://codeload.github.com/pnggroup/libpng/tar.gz/4e3f57d50f552841550a36eabbb3fbcecacb7750",
+      "archive_root": "libpng-4e3f57d50f552841550a36eabbb3fbcecacb7750",
+      "target": "build/libpng16.so.16.53.0",
+      "required_defined_symbols": [
+        "png_access_version_number",
+        "png_create_read_struct",
+        "png_create_write_struct",
+        "png_read_info",
+        "png_write_info"
+      ],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "v5",
+      "version": "1.6.54",
+      "tag": "v1.6.54",
+      "revision": "02f2b4f4699f0ef9111a6534f093b53732df4452",
+      "source_date_epoch": 1768255072,
+      "source_archive_url": "https://codeload.github.com/pnggroup/libpng/tar.gz/02f2b4f4699f0ef9111a6534f093b53732df4452",
+      "archive_root": "libpng-02f2b4f4699f0ef9111a6534f093b53732df4452",
+      "target": "build/libpng16.so.16.54.0",
+      "required_defined_symbols": [
+        "png_access_version_number",
+        "png_create_read_struct",
+        "png_create_write_struct",
+        "png_read_info",
+        "png_write_info"
+      ],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "v6",
+      "version": "1.6.55",
+      "tag": "v1.6.55",
+      "revision": "c3e304954a9cfd154bc0dfbfea2b01cd61d6546d",
+      "source_date_epoch": 1770667340,
+      "source_archive_url": "https://codeload.github.com/pnggroup/libpng/tar.gz/c3e304954a9cfd154bc0dfbfea2b01cd61d6546d",
+      "archive_root": "libpng-c3e304954a9cfd154bc0dfbfea2b01cd61d6546d",
+      "target": "build/libpng16.so.16.55.0",
+      "required_defined_symbols": [
+        "png_access_version_number",
+        "png_create_read_struct",
+        "png_create_write_struct",
+        "png_read_info",
+        "png_write_info"
+      ],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "v7",
+      "version": "1.6.56",
+      "tag": "v1.6.56",
+      "revision": "d5515b5b8be3901aac04e5bd8bd5c89f287bcd33",
+      "source_date_epoch": 1774471626,
+      "source_archive_url": "https://codeload.github.com/pnggroup/libpng/tar.gz/d5515b5b8be3901aac04e5bd8bd5c89f287bcd33",
+      "archive_root": "libpng-d5515b5b8be3901aac04e5bd8bd5c89f287bcd33",
+      "target": "build/libpng16.so.16.56.0",
+      "required_defined_symbols": [
+        "png_access_version_number",
+        "png_create_read_struct",
+        "png_create_write_struct",
+        "png_read_info",
+        "png_write_info"
+      ],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "v8",
+      "version": "1.6.57",
+      "tag": "v1.6.57",
+      "revision": "95ab3fdca83ea294efd3b092e9a53c5a39886444",
+      "source_date_epoch": 1775681364,
+      "source_archive_url": "https://codeload.github.com/pnggroup/libpng/tar.gz/95ab3fdca83ea294efd3b092e9a53c5a39886444",
+      "archive_root": "libpng-95ab3fdca83ea294efd3b092e9a53c5a39886444",
+      "target": "build/libpng16.so.16.57.0",
+      "required_defined_symbols": [
+        "png_access_version_number",
+        "png_create_read_struct",
+        "png_create_write_struct",
+        "png_read_info",
+        "png_write_info"
+      ],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "v9",
+      "version": "1.6.58",
+      "tag": "v1.6.58",
+      "revision": "3061454d980de7d53608f594194cfac722721d2a",
+      "source_date_epoch": 1776273806,
+      "source_archive_url": "https://codeload.github.com/pnggroup/libpng/tar.gz/3061454d980de7d53608f594194cfac722721d2a",
+      "archive_root": "libpng-3061454d980de7d53608f594194cfac722721d2a",
+      "target": "build/libpng16.so.16.58.0",
+      "required_defined_symbols": [
+        "png_access_version_number",
+        "png_create_read_struct",
+        "png_create_write_struct",
+        "png_read_info",
+        "png_write_info"
+      ],
+      "absent_defined_symbols": []
+    }
+  ],
+  "dependencies": [
+    {
+      "version": "1.2.13",
+      "tag": "v1.2.13",
+      "revision": "04f42ceca40f73e2978b50e93806c2a18c1281fc",
+      "source_date_epoch": 1665637615,
+      "source_archive_url": "https://codeload.github.com/madler/zlib/tar.gz/04f42ceca40f73e2978b50e93806c2a18c1281fc",
+      "archive_root": "zlib-04f42ceca40f73e2978b50e93806c2a18c1281fc",
+      "target": "libz.so.1.2.13",
+      "name": "zlib",
+      "repository": "https://github.com/madler/zlib",
+      "recipe": "recipes/zlib-dependency.sh",
+      "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/zlib",
+      "ldflags": "-Wl,--build-id=sha1",
+      "license": {
+        "spdx": "Zlib",
+        "notice_sources": [
+          "README"
+        ],
+        "review": "Zlib notice reviewed; retained. No contrib code."
+      },
+      "linkage": "shared",
+      "bundled": false,
+      "purpose": "Fixed shared dependency, built once per project job. Runtime libz.so.1 not bundled."
+    }
+  ]
+}

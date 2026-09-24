@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "pair_id": "file-oss-fuzz-1064",
+  "project": "file",
+  "repository": "https://github.com/file/file",
+  "change": {
+    "reference": "https://api.osv.dev/v1/vulns/OSV-2017-134",
+    "description": "Immediate parent and fix commit for OSS-Fuzz issue 1064; the fix bounds a CDF property string scan by its recorded end.",
+    "kind": "oss-fuzz-fix-commit",
+    "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065"
+  },
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/366f8b394247b5b8165f05d6321c3da845e00065/projects/file",
+  "architecture": "x86_64",
+  "format": "ELF64-little-endian",
+  "role": "library",
+  "runner": "ubuntu-24.04",
+  "recipe": "recipes/file.sh",
+  "harness": {"name": "magic_fuzzer", "source_path": "projects/file/magic_fuzzer.cc", "target": "build/magic_fuzzer", "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065", "sources": [{"repository": "https://github.com/google/oss-fuzz", "revision": "366f8b394247b5b8165f05d6321c3da845e00065", "path": "projects/file/magic_fuzzer.cc", "destination": "magic_fuzzer.cc", "sha256": "34377dfcc5d4e0ac7258e3638779b0d37104f4a71700240642234cbc4b878937"}]},
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/file",
+  "ldflags": "-Wl,--build-id=sha1",
+  "parallel_jobs": 2,
+  "limits": {
+    "source_archive_bytes": 16777216,
+    "source_expanded_bytes": 134217728,
+    "corpus_bytes": 67108864,
+    "workspace_checkpoint_bytes": 4294967296
+  },
+  "license": {
+    "spdx": "BSD-2-Clause",
+    "notice_sources": ["COPYING"],
+    "review": "The upstream two-clause BSD-style notice is retained. libmagic and a linked OSS-Fuzz harness are built; the file utility is excluded. Optional compression libraries remain external runtime dependencies when detected."
+  },
+  "versions": [
+    {
+      "side": "parent",
+      "version": "1064-parent",
+      "tag": "f0bcdd07",
+      "revision": "f0bcdd072ac801984d8503844570c98e2c3cfac0",
+      "source_date_epoch": 1491683926,
+      "source_archive_url": "https://codeload.github.com/file/file/tar.gz/f0bcdd072ac801984d8503844570c98e2c3cfac0",
+      "archive_root": "file-f0bcdd072ac801984d8503844570c98e2c3cfac0",
+      "target": "src/.libs/libmagic.so",
+      "required_defined_symbols": ["magic_open", "magic_buffer", "magic_close"],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "fix",
+      "version": "1064-fixed",
+      "tag": "19ccebaf",
+      "revision": "19ccebafb7663c422c714e0c67fa4775abf91c43",
+      "source_date_epoch": 1491685083,
+      "source_archive_url": "https://codeload.github.com/file/file/tar.gz/19ccebafb7663c422c714e0c67fa4775abf91c43",
+      "archive_root": "file-19ccebafb7663c422c714e0c67fa4775abf91c43",
+      "target": "src/.libs/libmagic.so",
+      "required_defined_symbols": ["magic_open", "magic_buffer", "magic_close"],
+      "absent_defined_symbols": []
+    }
+  ]
+}

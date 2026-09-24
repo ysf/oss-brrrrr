@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "pair_id": "harfbuzz-oss-fuzz-32555-2.8.0-2.8.1",
+  "project": "harfbuzz",
+  "repository": "https://github.com/harfbuzz/harfbuzz",
+  "change": {
+    "reference": "https://api.osv.dev/v1/vulns/OSV-2021-573",
+    "description": "Stable release immediately before the fix and the next stable release for OSS-Fuzz issue 32555; OSV lists no affected release.",
+    "kind": "oss-fuzz-bracketing-releases"
+  },
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/1d292441cce797266df3393b783bd5443e4cdbf0/projects/harfbuzz",
+  "architecture": "x86_64",
+  "format": "ELF64-little-endian",
+  "role": "library",
+  "runner": "ubuntu-24.04",
+  "recipe": "recipes/harfbuzz.sh",
+  "harness": {"name": "hb-subset-fuzzer", "source_path": "test/fuzzing/hb-subset-fuzzer.cc", "target": "harness-build/hb-subset-fuzzer", "oss_fuzz_revision": "1d292441cce797266df3393b783bd5443e4cdbf0"},
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/harfbuzz",
+  "ldflags": "-Wl,--build-id=sha1",
+  "parallel_jobs": 2,
+  "limits": {
+    "source_archive_bytes": 33554432,
+    "source_expanded_bytes": 268435456,
+    "corpus_bytes": 134217728,
+    "workspace_checkpoint_bytes": 4294967296
+  },
+  "license": {
+    "spdx": "HarfBuzz",
+    "notice_sources": ["COPYING"],
+    "review": "Old MIT-style HarfBuzz notice retained. Optional integrations, utilities and tests are disabled; the subset library containing the reported code path is built and its core HarfBuzz runtime dependency is not bundled."
+  },
+  "versions": [
+    {
+      "side": "before",
+      "version": "2.8.0",
+      "tag": "2.8.0",
+      "revision": "03538e872a0610a65fad692b33d3646f387cf578",
+      "source_date_epoch": 1615915755,
+      "source_archive_url": "https://codeload.github.com/harfbuzz/harfbuzz/tar.gz/03538e872a0610a65fad692b33d3646f387cf578",
+      "archive_root": "harfbuzz-03538e872a0610a65fad692b33d3646f387cf578",
+      "target": "build/libharfbuzz-subset.so",
+      "required_defined_symbols": ["hb_subset", "hb_subset_input_create_or_fail"],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "successor",
+      "version": "2.8.1",
+      "tag": "2.8.1",
+      "revision": "b37f03f16b39d397a626f097858e9ae550234ca0",
+      "source_date_epoch": 1620086868,
+      "source_archive_url": "https://codeload.github.com/harfbuzz/harfbuzz/tar.gz/b37f03f16b39d397a626f097858e9ae550234ca0",
+      "archive_root": "harfbuzz-b37f03f16b39d397a626f097858e9ae550234ca0",
+      "target": "build/libharfbuzz-subset.so",
+      "required_defined_symbols": ["hb_subset", "hb_subset_input_create_or_fail"],
+      "absent_defined_symbols": []
+    }
+  ]
+}

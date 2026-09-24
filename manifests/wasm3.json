@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "pair_id": "wasm3-oss-fuzz-33318",
+  "project": "wasm3",
+  "repository": "https://github.com/wasm3/wasm3",
+  "change": {
+    "reference": "https://api.osv.dev/v1/vulns/OSV-2021-642",
+    "description": "Immediate parent and OSV-listed fix commit for OSS-Fuzz issue 33318; the fix adds stack-overflow accounting and a guard before EvaluateExpression execution.",
+    "kind": "oss-fuzz-fix-commit",
+    "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065"
+  },
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/366f8b394247b5b8165f05d6321c3da845e00065/projects/wasm3",
+  "architecture": "x86_64",
+  "format": "ELF64-little-endian",
+  "role": "library",
+  "runner": "ubuntu-24.04",
+  "recipe": "recipes/wasm3.sh",
+  "harness": {"name": "fuzzer", "source_path": "platforms/app_fuzz/fuzzer.c", "target": "build/wasm3_fuzzer", "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065"},
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/wasm3",
+  "ldflags": "-Wl,--build-id=sha1",
+  "parallel_jobs": 2,
+  "limits": {
+    "source_archive_bytes": 16777216,
+    "source_expanded_bytes": 134217728,
+    "corpus_bytes": 67108864,
+    "workspace_checkpoint_bytes": 4294967296
+  },
+  "license": {
+    "spdx": "MIT",
+    "notice_sources": ["LICENSE"],
+    "review": "MIT license notice retained. The interpreter library is rebuilt as a position-independent shared analysis object and linked OSS-Fuzz harness; the app and WASI integrations are excluded."
+  },
+  "versions": [
+    {
+      "side": "parent",
+      "version": "33318-parent",
+      "tag": "7dd44291",
+      "revision": "7dd44291c7e6d60f6c358c83557e4e9c8b028e53",
+      "source_date_epoch": 1618565632,
+      "source_archive_url": "https://codeload.github.com/wasm3/wasm3/tar.gz/7dd44291c7e6d60f6c358c83557e4e9c8b028e53",
+      "archive_root": "wasm3-7dd44291c7e6d60f6c358c83557e4e9c8b028e53",
+      "target": "build/libwasm3.so",
+      "required_defined_symbols": ["m3_NewEnvironment", "m3_ParseModule", "m3_LoadModule"],
+      "absent_defined_symbols": ["m3_SetModuleName"]
+    },
+    {
+      "side": "fix",
+      "version": "33318-fixed",
+      "tag": "b48695bb",
+      "revision": "b48695bb940e55c0baa0a3d5740cf48e03643b58",
+      "source_date_epoch": 1618683017,
+      "source_archive_url": "https://codeload.github.com/wasm3/wasm3/tar.gz/b48695bb940e55c0baa0a3d5740cf48e03643b58",
+      "archive_root": "wasm3-b48695bb940e55c0baa0a3d5740cf48e03643b58",
+      "target": "build/libwasm3.so",
+      "required_defined_symbols": ["m3_NewEnvironment", "m3_ParseModule", "m3_LoadModule", "m3_SetModuleName"],
+      "absent_defined_symbols": []
+    }
+  ]
+}

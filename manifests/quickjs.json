@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "pair_id": "quickjs-oss-fuzz-21404",
+  "project": "quickjs",
+  "repository": "https://github.com/bellard/quickjs",
+  "change": {
+    "reference": "https://api.osv.dev/v1/vulns/OSV-2020-1053",
+    "description": "Immediate parent and release commit associated with OSS-Fuzz issue 21404; the release commit replaces a parser assertion with an explicit syntax error path among other changes.",
+    "kind": "oss-fuzz-fix-commit",
+    "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065"
+  },
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/366f8b394247b5b8165f05d6321c3da845e00065/projects/quickjs",
+  "architecture": "x86_64",
+  "format": "ELF64-little-endian",
+  "role": "library",
+  "runner": "ubuntu-24.04",
+  "recipe": "recipes/quickjs.sh",
+  "harness": {"name": "fuzz_compile", "source_path": "fuzz/fuzz_compile.c", "target": "build/fuzz_compile", "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065", "sources": [{"repository": "https://github.com/bellard/quickjs", "revision": "d53aafe0f30f8aee36fb600d8f578baef1a49a72", "path": "fuzz/fuzz_compile.c", "destination": "fuzz_compile.c", "sha256": "b4e538c5e75fc78098d87de5656b08c83e0675b06f31ffbd0dd2dfc9cf09b2a7"}, {"repository": "https://github.com/bellard/quickjs", "revision": "d53aafe0f30f8aee36fb600d8f578baef1a49a72", "path": "fuzz/fuzz_common.c", "destination": "fuzz_common.c", "sha256": "e59fa06d0cfd00f53f585f7396f75c98195cc337569073508ca862f4da81e98a"}, {"repository": "https://github.com/bellard/quickjs", "revision": "d53aafe0f30f8aee36fb600d8f578baef1a49a72", "path": "fuzz/fuzz_common.h", "destination": "fuzz/fuzz_common.h", "sha256": "7483a0ae69ffd335716ef369c84a44ffffca517b9ca743dd6d205642723c1a68"}]},
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/quickjs",
+  "ldflags": "-Wl,--build-id=sha1",
+  "parallel_jobs": 2,
+  "limits": {
+    "source_archive_bytes": 16777216,
+    "source_expanded_bytes": 134217728,
+    "corpus_bytes": 67108864,
+    "workspace_checkpoint_bytes": 4294967296
+  },
+  "license": {
+    "spdx": "MIT",
+    "notice_sources": ["Makefile"],
+    "review": "The upstream MIT notice embedded in the Makefile is retained. A shared QuickJS library and linked fuzz_compile harness are built; command-line tools, examples and tests are excluded. libm and libdl remain external system dependencies."
+  },
+  "versions": [
+    {
+      "side": "parent",
+      "version": "21404-parent",
+      "tag": "5ae7ebbe",
+      "revision": "5ae7ebbeecc4210e763ad76555571e3b31db6e24",
+      "source_date_epoch": 1584463490,
+      "source_archive_url": "https://codeload.github.com/bellard/quickjs/tar.gz/5ae7ebbeecc4210e763ad76555571e3b31db6e24",
+      "archive_root": "quickjs-5ae7ebbeecc4210e763ad76555571e3b31db6e24",
+      "target": "libquickjs.so",
+      "required_defined_symbols": ["JS_NewRuntime", "JS_Eval", "JS_ReadObject"],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "fix",
+      "version": "21404-fixed",
+      "tag": "1bf1aba3",
+      "revision": "1bf1aba3af61529a282528c8c382b5f078cce63f",
+      "source_date_epoch": 1586832676,
+      "source_archive_url": "https://codeload.github.com/bellard/quickjs/tar.gz/1bf1aba3af61529a282528c8c382b5f078cce63f",
+      "archive_root": "quickjs-1bf1aba3af61529a282528c8c382b5f078cce63f",
+      "target": "libquickjs.so",
+      "required_defined_symbols": ["JS_NewRuntime", "JS_Eval", "JS_ReadObject"],
+      "absent_defined_symbols": []
+    }
+  ]
+}

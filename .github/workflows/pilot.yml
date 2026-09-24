@@ -1,0 +1,103 @@
+name: Bounded release series
+on:
+  workflow_dispatch:
+    inputs:
+      reuse_run_id:
+        description: 'Optional successful workflow run containing exact project artifacts; mismatch fails'
+        required: false
+        type: string
+permissions: {}
+concurrency:
+  group: bounded-release-series
+  cancel-in-progress: false
+jobs:
+  build:
+    if: github.event_name == 'workflow_dispatch' && github.repository == 'ysf/oss-brrrrr' && github.ref == 'refs/heads/main' && github.event.repository.private == false
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        project: [zlib, lz4, libpng, lwan, pcapplusplus, harfbuzz, simdjson, wasm3, file, c-ares, quickjs, libass, c-blosc2, libredwg, libvips, libjxl, muparser, libplist, openthread, clamav]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    env:
+      PROJECT: ${{ matrix.project }}
+      REUSE_RUN_ID: ${{ inputs.reuse_run_id }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Retrieve explicitly selected prior project result
+        if: env.REUSE_RUN_ID != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$REUSE_RUN_ID" =~ ^[0-9]+$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$REUSE_RUN_ID" > prior-run.json
+          jq -e '.conclusion == "success" and .event == "workflow_dispatch" and .head_branch == "main" and .path == ".github/workflows/pilot.yml"' prior-run.json
+          gh run download "$REUSE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "$PROJECT-series" --dir reuse
+      - name: Check metadata integrity behavior
+        run: python3 -m unittest discover -s tests -v
+      - name: Install project build dependencies
+        if: env.REUSE_RUN_ID == '' && contains(fromJSON('["file","pcapplusplus","libass","libredwg","libvips","libjxl","clamav"]'), env.PROJECT)
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          case "$PROJECT" in
+            file) sudo apt-get install -y libbz2-dev liblz4-dev liblzma-dev libzstd-dev zlib1g-dev ;;
+            pcapplusplus) sudo apt-get install -y libpcap-dev ;;
+            libass) sudo apt-get install -y libfreetype-dev libfribidi-dev libharfbuzz-dev libfontconfig1-dev ;;
+            libredwg) sudo apt-get install -y bison flex libpcre2-dev ;;
+            libvips) sudo apt-get install -y libglib2.0-dev libexpat1-dev libexif-dev gettext gtk-doc-tools ;;
+            libjxl) sudo apt-get install -y ninja-build libbrotli-dev libhwy-dev libjpeg-dev liblcms2-dev ;;
+            clamav) sudo apt-get install -y bison flex libbz2-dev libcurl4-openssl-dev libssl-dev libxml2-dev zlib1g-dev ;;
+          esac
+      - name: Build or verify exact project reuse
+        run: python3 scripts/pilot.py build "$PROJECT"
+      - name: Upload provisional project corpus
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: ${{ matrix.project }}-series
+          path: out/*
+          if-no-files-found: error
+          retention-days: 7
+          overwrite: false
+          compression-level: 0
+      - name: Preserve diagnostics even on failure
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: diagnostics-${{ matrix.project }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: diagnostics/*
+          if-no-files-found: warn
+          retention-days: 7
+          overwrite: false
+  verify:
+    needs: build
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        project: [zlib, lz4, libpng, lwan, pcapplusplus, harfbuzz, simdjson, wasm3, file, c-ares, quickjs, libass, c-blosc2, libredwg, libvips, libjxl, muparser, libplist, openthread, clamav]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    env:
+      PROJECT: ${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: ${{ matrix.project }}-series
+          path: out
+      - name: Verify complete series, provenance, ELF and defined symbols on fresh runner
+        run: python3 scripts/pilot.py verify "$PROJECT"

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "pair_id": "clamav-oss-fuzz-21960",
+  "project": "clamav",
+  "repository": "https://github.com/Cisco-Talos/clamav",
+  "change": {
+    "reference": "https://api.osv.dev/v1/vulns/OSV-2020-1802",
+    "description": "Immediate parent and fix commit for OSS-Fuzz issue 21960; the fix validates VBA record sizes against the remaining input before parser reads.",
+    "kind": "oss-fuzz-fix-commit",
+    "oss_fuzz_revision": "83ee390bc03ffb6ed2faf37d6a66c177824e979e"
+  },
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/83ee390bc03ffb6ed2faf37d6a66c177824e979e/projects/clamav",
+  "architecture": "x86_64",
+  "format": "ELF64-little-endian",
+  "role": "library",
+  "runner": "ubuntu-24.04",
+  "recipe": "recipes/clamav.sh",
+  "harness": {
+    "name": "clamav_scanmap_OLE2_fuzzer",
+    "source_path": "fuzz/clamav_scanmap_fuzzer.cpp",
+    "target": "harness-build/clamav_scanmap_OLE2_fuzzer",
+    "oss_fuzz_revision": "83ee390bc03ffb6ed2faf37d6a66c177824e979e"
+  },
+  "cflags": "-O2 -g -fno-omit-frame-pointer -fPIC -ffile-prefix-map={source}=/usr/src/clamav",
+  "ldflags": "-Wl,--build-id=sha1",
+  "parallel_jobs": 2,
+  "limits": {
+    "source_archive_bytes": 33554432,
+    "source_expanded_bytes": 134217728,
+    "corpus_bytes": 268435456,
+    "workspace_checkpoint_bytes": 4294967296
+  },
+  "license": {
+    "spdx": "GPL-2.0-or-later",
+    "notice_sources": ["COPYING"],
+    "review": "The upstream GPLv2-or-later license is retained. The shared libclamav library and statically linked historical OSS-Fuzz OLE2 scanmap harness are built; applications, services, tests, and other fuzzers are excluded."
+  },
+  "versions": [
+    {
+      "side": "parent",
+      "version": "21960-parent",
+      "tag": "4b7a7381",
+      "revision": "4b7a73815266f916f1b86033b806fa4ef182e6db",
+      "source_date_epoch": 1589329500,
+      "source_archive_url": "https://codeload.github.com/Cisco-Talos/clamav/tar.gz/4b7a73815266f916f1b86033b806fa4ef182e6db",
+      "archive_root": "clamav-4b7a73815266f916f1b86033b806fa4ef182e6db",
+      "target": "libclamav/.libs/libclamav.so",
+      "required_defined_symbols": ["cl_engine_new", "cl_fmap_open_memory", "cl_scanmap_callback"],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "fix",
+      "version": "21960-fixed",
+      "tag": "a97ce0c8",
+      "revision": "a97ce0c8371162d51972d7e03e4592e7d8e8e0e3",
+      "source_date_epoch": 1589329717,
+      "source_archive_url": "https://codeload.github.com/Cisco-Talos/clamav/tar.gz/a97ce0c8371162d51972d7e03e4592e7d8e8e0e3",
+      "archive_root": "clamav-a97ce0c8371162d51972d7e03e4592e7d8e8e0e3",
+      "target": "libclamav/.libs/libclamav.so",
+      "required_defined_symbols": ["cl_engine_new", "cl_fmap_open_memory", "cl_scanmap_callback"],
+      "absent_defined_symbols": []
+    }
+  ]
+}

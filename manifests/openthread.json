@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "pair_id": "openthread-oss-fuzz-13619",
+  "project": "openthread",
+  "repository": "https://github.com/openthread/openthread",
+  "change": {
+    "reference": "https://api.osv.dev/v1/vulns/OSV-2020-380",
+    "description": "Immediate parent and fix commit for OSS-Fuzz issue 13619; the fix derives a ChannelMask TLV end pointer and dominates entry dereferences with cursor/end comparisons.",
+    "kind": "oss-fuzz-fix-commit",
+    "oss_fuzz_revision": "bc4ab87d3299de4bb8eafe3b9703b1cc72fc13db"
+  },
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/bc4ab87d3299de4bb8eafe3b9703b1cc72fc13db/projects/openthread",
+  "architecture": "x86_64",
+  "format": "ELF64-little-endian",
+  "role": "library",
+  "runner": "ubuntu-24.04",
+  "recipe": "recipes/openthread.sh",
+  "harness": {
+    "name": "ncp-uart-received-fuzzer",
+    "source_path": "tests/fuzz/ncp_uart_received.cpp",
+    "target": "harness-build/ncp-uart-received-fuzzer",
+    "oss_fuzz_revision": "bc4ab87d3299de4bb8eafe3b9703b1cc72fc13db"
+  },
+  "cflags": "-O2 -g -fno-omit-frame-pointer -fPIC -ffile-prefix-map={source}=/usr/src/openthread",
+  "ldflags": "-Wl,--build-id=sha1",
+  "parallel_jobs": 2,
+  "limits": {
+    "source_archive_bytes": 67108864,
+    "source_expanded_bytes": 536870912,
+    "corpus_bytes": 268435456,
+    "workspace_checkpoint_bytes": 4294967296
+  },
+  "license": {
+    "spdx": "BSD-3-Clause",
+    "notice_sources": ["LICENSE", "NOTICE", "AUTHORS"],
+    "review": "The upstream BSD three-clause license, notice, and authors list are retained. The FTD core is exported as a shared analysis library and linked with the historical OSS-Fuzz NCP UART harness; applications, tools, documentation, tests, and other fuzzers are excluded from the artifact set."
+  },
+  "versions": [
+    {
+      "side": "parent",
+      "version": "13619-parent",
+      "tag": "92e4d89f",
+      "revision": "92e4d89f6458a5d6be6fd0742499cac8080b3ad6",
+      "source_date_epoch": 1552412818,
+      "source_archive_url": "https://codeload.github.com/openthread/openthread/tar.gz/92e4d89f6458a5d6be6fd0742499cac8080b3ad6",
+      "archive_root": "openthread-92e4d89f6458a5d6be6fd0742499cac8080b3ad6",
+      "target": "build/libopenthread-ftd.so",
+      "required_defined_symbols": ["otInstanceInitSingle", "otIp6SetEnabled", "otThreadSetEnabled"],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "fix",
+      "version": "13619-fixed",
+      "tag": "e8253150",
+      "revision": "e82531507b7bd1efe6c70ebf4741d5c05c05c6ab",
+      "source_date_epoch": 1552412832,
+      "source_archive_url": "https://codeload.github.com/openthread/openthread/tar.gz/e82531507b7bd1efe6c70ebf4741d5c05c05c6ab",
+      "archive_root": "openthread-e82531507b7bd1efe6c70ebf4741d5c05c05c6ab",
+      "target": "build/libopenthread-ftd.so",
+      "required_defined_symbols": ["otInstanceInitSingle", "otIp6SetEnabled", "otThreadSetEnabled"],
+      "absent_defined_symbols": []
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+# Only source, recipes, manifests and documentation belong in Git.
+/out/
+/reuse/
+/build-work/
+/diagnostics/
+/prior-run.json
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.env.*

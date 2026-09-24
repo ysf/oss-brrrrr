@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "pair_id": "libass-oss-fuzz-31301",
+  "project": "libass",
+  "repository": "https://github.com/libass/libass",
+  "change": {"reference": "https://api.osv.dev/v1/vulns/OSV-2021-442", "description": "Immediate parent and fix commit for OSS-Fuzz issue 31301; the fix handles zero-length buffers before hashing.", "kind": "oss-fuzz-fix-commit", "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065"},
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/366f8b394247b5b8165f05d6321c3da845e00065/projects/libass",
+  "architecture": "x86_64", "format": "ELF64-little-endian", "role": "library", "runner": "ubuntu-24.04", "recipe": "recipes/libass.sh",
+  "harness": {"name": "libass_fuzzer", "source_path": "fuzz/fuzz.c", "target": "build/libass_fuzzer", "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065", "sources": [{"repository": "https://github.com/libass/libass", "revision": "6a123b95a57f139f860fd7d2ae5d45184013fd0c", "path": "fuzz/fuzz.c", "destination": "fuzz.c", "sha256": "6d405c16cbcf22ca8189f49cfdfa343c1a235687d7ef99bc92ae549216140038"}]},
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/libass", "ldflags": "-Wl,--build-id=sha1", "parallel_jobs": 2,
+  "limits": {"source_archive_bytes": 16777216, "source_expanded_bytes": 134217728, "corpus_bytes": 67108864, "workspace_checkpoint_bytes": 4294967296},
+  "license": {"spdx": "ISC", "notice_sources": ["COPYING"], "review": "The upstream ISC notice is retained. The shared subtitle renderer and a linked OSS-Fuzz harness are built; other tests are excluded. Fontconfig, FreeType, FriBidi and HarfBuzz remain external system dependencies."},
+  "versions": [
+    {"side": "parent", "version": "31301-parent", "tag": "a93e17f5", "revision": "a93e17f5ffe526e68c88d69141dbf495523376e2", "source_date_epoch": 1614035604, "source_archive_url": "https://codeload.github.com/libass/libass/tar.gz/a93e17f5ffe526e68c88d69141dbf495523376e2", "archive_root": "libass-a93e17f5ffe526e68c88d69141dbf495523376e2", "target": "libass/.libs/libass.so", "required_defined_symbols": ["ass_library_init", "ass_renderer_init", "ass_render_frame"], "absent_defined_symbols": []},
+    {"side": "fix", "version": "31301-fixed", "tag": "8f987713", "revision": "8f987713dd0fa791c5c511c13bb27021fa653fb0", "source_date_epoch": 1614120834, "source_archive_url": "https://codeload.github.com/libass/libass/tar.gz/8f987713dd0fa791c5c511c13bb27021fa653fb0", "archive_root": "libass-8f987713dd0fa791c5c511c13bb27021fa653fb0", "target": "libass/.libs/libass.so", "required_defined_symbols": ["ass_library_init", "ass_renderer_init", "ass_render_frame"], "absent_defined_symbols": []}
+  ]
+}

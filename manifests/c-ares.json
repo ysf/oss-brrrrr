@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "pair_id": "c-ares-oss-fuzz-15373",
+  "project": "c-ares",
+  "repository": "https://github.com/c-ares/c-ares",
+  "change": {
+    "reference": "https://api.osv.dev/v1/vulns/OSV-2020-435",
+    "description": "Immediate parent and fix commit for OSS-Fuzz issue 15373; the fix filters parsed address records by family before copying IPv4 or IPv6 data.",
+    "kind": "oss-fuzz-fix-commit",
+    "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065"
+  },
+  "oss_fuzz_recipe": "https://github.com/google/oss-fuzz/tree/366f8b394247b5b8165f05d6321c3da845e00065/projects/c-ares",
+  "architecture": "x86_64",
+  "format": "ELF64-little-endian",
+  "role": "library",
+  "runner": "ubuntu-24.04",
+  "recipe": "recipes/c-ares.sh",
+  "harness": {"name": "ares_parse_reply_fuzzer", "source_path": "test/ares-test-fuzz.c", "target": "build/ares_parse_reply_fuzzer", "oss_fuzz_revision": "366f8b394247b5b8165f05d6321c3da845e00065"},
+  "cflags": "-O2 -g -fno-omit-frame-pointer -ffile-prefix-map={source}=/usr/src/c-ares",
+  "ldflags": "-Wl,--build-id=sha1",
+  "parallel_jobs": 2,
+  "limits": {
+    "source_archive_bytes": 16777216,
+    "source_expanded_bytes": 134217728,
+    "corpus_bytes": 67108864,
+    "workspace_checkpoint_bytes": 4294967296
+  },
+  "license": {
+    "spdx": "MIT",
+    "notice_sources": ["LICENSE.md"],
+    "review": "The c-ares MIT-style notice is retained. The shared resolver library and a linked OSS-Fuzz harness are built; other tools and tests are excluded. System resolver libraries remain external when detected."
+  },
+  "versions": [
+    {
+      "side": "parent",
+      "version": "15373-parent",
+      "tag": "c5bfbe0d",
+      "revision": "c5bfbe0dc3086b39218a4d9a8ef2ce4f538673da",
+      "source_date_epoch": 1560946959,
+      "source_archive_url": "https://codeload.github.com/c-ares/c-ares/tar.gz/c5bfbe0dc3086b39218a4d9a8ef2ce4f538673da",
+      "archive_root": "c-ares-c5bfbe0dc3086b39218a4d9a8ef2ce4f538673da",
+      "target": "build/lib/libcares.so",
+      "required_defined_symbols": ["ares_library_init", "ares_init", "ares_parse_aaaa_reply"],
+      "absent_defined_symbols": []
+    },
+    {
+      "side": "fix",
+      "version": "15373-fixed",
+      "tag": "5dd3629b",
+      "revision": "5dd3629bc93449840c36dd635ea6cce606b8c366",
+      "source_date_epoch": 1560996265,
+      "source_archive_url": "https://codeload.github.com/c-ares/c-ares/tar.gz/5dd3629bc93449840c36dd635ea6cce606b8c366",
+      "archive_root": "c-ares-5dd3629bc93449840c36dd635ea6cce606b8c366",
+      "target": "build/lib/libcares.so",
+      "required_defined_symbols": ["ares_library_init", "ares_init", "ares_parse_aaaa_reply"],
+      "absent_defined_symbols": []
+    }
+  ]
+}
